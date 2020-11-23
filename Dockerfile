@@ -1,7 +1,5 @@
 FROM alpine:3.12.1
 
-ENV TIMEZONE Asia/Tokyo
-
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.12/community" >> /etc/apk/repositories
 RUN apk update && apk upgrade
 
@@ -20,11 +18,11 @@ RUN mv /usr/local/aipo/jre /usr/local/aipo/jre_old && \
 cp -rp /usr/lib/jvm/java-1.8-openjdk/jre /usr/local/aipo/
 
 
-RUN echo '''#!/bin/sh \
-/usr/local/aipo/bin/startup.sh \
-tail -f /dev/null ''' > /usr/local/aipo/aipo-wrapper.sh
+RUN echo '#!/bin/sh' >> /usr/local/aipo/bin/aipo-wrapper.sh && \
+echo '/usr/local/aipo/bin/startup.sh' >> /usr/local/aipo/bin/aipo-wrapper.sh && \
+echo 'tail -f /dev/null' >> /usr/local/aipo/bin/aipo-wrapper.sh
 
-
+RUN chmod +x /usr/local/aipo/bin/aipo-wrapper.sh
 
 EXPOSE 80
 CMD /usr/local/aipo/bin/aipo-wrapper.sh
